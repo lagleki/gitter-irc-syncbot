@@ -4,8 +4,8 @@ var xtend = require('xtend')
 var gitterClient = require('./gitter.js')
 
 function escapeName (name) {
-  var t = '`'
-  while (name.indexOf(t) >= 0) t += '`'
+  var t = '**'
+  while (name.indexOf(t) >= 0) t += '**'
   return t + ' ' + name + ' ' + t
 }
 
