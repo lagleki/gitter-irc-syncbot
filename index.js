@@ -6,6 +6,10 @@ var gitterClient = require('./gitter.js')
 function escapeName (name) {
   var t = '**'
   while (name.indexOf(t) >= 0) t += '**'
+name = name.replace(/^<.*?>: <[0-9,]*(.*?)>: /,'$1: ')
+            .replace(/^<.*?>: &lt;[0-9,]*(.*?)&gt;: /,'<$1>: ')
+            .replace(/^<(.*?)>: /,'$1: ')
+            .replace(/^<(.*?)>:\n/,'');
   return t + ' ' + name + ' ' + t
 }
 
