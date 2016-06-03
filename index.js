@@ -67,7 +67,7 @@ module.exports = function (opts) {
           }
 
           var text = lines.map(function (line) {
-            return '<' + userName + '> ' + line
+            return '<' + userName + '>: ' + line
           }).join('\n')
 
           // mark message as read by bot
