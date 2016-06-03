@@ -5,13 +5,12 @@ var gitterClient = require('./gitter.js')
 
 function escapeName (name) {
   var t = '**'
-  while (name.indexOf(t) >= 0) t += '**'
-  console.log("OOOO " + name);
 name = name.replace(/^<.*?>: <[0-9,]*(.*?)>: /,'$1: ')
             .replace(/^<.*?>: &lt;[0-9,]*(.*?)&gt;: /,'<$1>: ')
             .replace(/^<(.*?)>: /,'$1: ')
             .replace(/^<(.*?)>:\n/,'');
-            console.log("OOOOY " + t + ' ' + name + ' ' + t);
+            console.log("OOOOY " + name);
+  while (name.indexOf(t) >= 0) t += '**'
   return t + ' ' + name + ' ' + t
 }
 
