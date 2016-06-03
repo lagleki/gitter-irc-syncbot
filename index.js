@@ -5,11 +5,6 @@ var gitterClient = require('./gitter.js')
 
 function escapeName (name) {
   var t = '**'
-name = name.replace(/^<.*?>: <[0-9,]*(.*?)>: /,'$1: ')
-            .replace(/^<.*?>: &lt;[0-9,]*(.*?)&gt;: /,'<$1>: ')
-            .replace(/^<(.*?)>: /,'$1: ')
-            .replace(/^<(.*?)>:\n/,'');
-            console.log("OOOOY " + name);
   while (name.indexOf(t) >= 0) t += '**'
   return t + ' ' + name + ' ' + t
 }
@@ -86,8 +81,17 @@ module.exports = function (opts) {
         }
 
         ircClient.on('message' + opts.ircChannel, function (from, message) {
+            var text = '<' + from.replace(/_+$/g,'') + '>: ' + JSON.stringify(message).replace(/^\"/,'').replace(/\"$/,'').replace(/\\u00[0-9]+/g,'').replace(/\\\\/g,'\\').replace(/\\/g,'');
+            text = text.split(" ");
+            if (text.length>=1){
+            	text[0] = text[0].replace(/[\[\]]/g,'').replace(/[`']/g,'h').replace(/-/g,'_');
+            }
+            text=text.join(" ")
+            .replace(/^<.*?>: <[0-9,]*(.*?)>: /,'**$1**: ')
+            .replace(/^<.*?>: &lt;[0-9,]*(.*?)&gt;: /,'<$1>: ')
+            .replace(/^<(.*?)>: /,'**$1**: ')
+            .replace(/^<(.*?)>:\n/,'');
           if (from === ircClient.nick) return
-          var text = escapeName(from) + ' ' + message
           console.log('irc:', text)
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
