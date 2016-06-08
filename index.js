@@ -77,6 +77,7 @@ module.exports = function (opts) {
             json: {chat: [ message.id ]}
           })
           console.log('gitter:', text)
+          //send Gitter=>IRC
           ircClient.say(opts.ircChannel, text)
         }
 
@@ -93,6 +94,7 @@ module.exports = function (opts) {
             .replace(/^<(.*?)>:\n/,'');
           if (from === ircClient.nick) return
           console.log('irc:', text)
+          //send IRC=>Gitter
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
         })
         ircClient.on('action', function (from, to, message) {
