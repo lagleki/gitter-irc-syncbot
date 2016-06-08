@@ -70,15 +70,16 @@ module.exports = function (opts) {
             return '<' + userName + '>: ' + line
           }).join('\n')
 
-          // mark message as read by bot
+          // ignore messages sent by GitterBot
           request.post({
             url: 'https://api.gitter.im/v1/user/' + gitterUserId + '/rooms/' + gitterRoomId + '/unreadItems',
             headers: headers,
             json: {chat: [ message.id ]}
           })
           console.log('gitter:', text)
-          //send Gitter=>IRC
+          //send Gitter=>IRC:
           ircClient.say(opts.ircChannel, text)
+          //send Gitter=>Telegram:
         }
 
         ircClient.on('message' + opts.ircChannel, function (from, message) {
@@ -94,8 +95,9 @@ module.exports = function (opts) {
             .replace(/^<(.*?)>:\n/,'');
           if (from === ircClient.nick) return
           console.log('irc:', text)
-          //send IRC=>Gitter
+          //send IRC=>Gitter:
           request.post({url: postGitterMessageUrl, headers: headers, json: {text: text}})
+          //send IRC=>Telegram:
         })
         ircClient.on('action', function (from, to, message) {
           if (to !== opts.ircChannel || from === ircClient.nick) return
